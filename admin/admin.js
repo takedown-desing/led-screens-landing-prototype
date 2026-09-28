@@ -75,7 +75,7 @@
   function errText(e) {
     if (!e) return 'Неизвестная ошибка';
     if (e.code === 'network') return 'Нет связи с GitHub. Проверьте интернет и попробуйте ещё раз.';
-    if (e.code === 'conflict') return 'Пока вы редактировали, на сайт уже опубликовали другие правки. Скачайте свои правки файлом, нажмите «Сбросить» и внесите их поверх новой версии.';
+    if (e.code === 'conflict') return 'Пока вы редактировали, на сайт уже опубликовали другие правки, поэтому публикация остановлена, чтобы их не затереть. Скачайте свои правки кнопкой «Скачать JSON», затем нажмите «Загрузить свежую версию» и внесите правки заново.';
     if (e.status === 401) return 'Токен недействителен или истёк. Создайте новый и подключитесь снова.';
     if (e.status === 403) return 'У токена нет права на запись. При создании токена нужно выдать Contents: Read and write.';
     if (e.status === 404) return 'Репозиторий не найден или у токена нет к нему доступа. Проверьте, что при создании токена выбран репозиторий ' + CFG.repo + '.';
@@ -465,6 +465,7 @@
     $('#pub-files').textContent = files.length ? 'Вместе с текстом уйдут новые файлы: ' + files.length + ' шт., ' + size(total) + '.' : 'Новых файлов нет, уйдёт только текст.';
     $('#pub-msg').value = 'Правки контента через админку';
     $('#pub-err').textContent = '';
+    $('#pub-reload').hidden = true;
     showModal('#m-publish');
   }
   function bindPublish() {
@@ -486,8 +487,16 @@
           toast('Опубликовано. Сайт обновится примерно через минуту.', 'ok', 6000);
           watchLive(json);
         })
-        .catch(function (x) { err.textContent = errText(x); })
+        .catch(function (x) { err.textContent = errText(x); $('#pub-reload').hidden = x.code !== 'conflict'; })
         .then(function () { btn.disabled = false; btn.textContent = 'Опубликовать'; });
+    });
+    $('#pub-reload').addEventListener('click', function () {
+      if (!confirm('Загрузить версию, которая сейчас на сайте? Ваши неопубликованные правки заменятся ею.')) return;
+      gh.readFile(CONTENT_PATH).then(function (f) {
+        state = JSON.parse(f.text); saved = JSON.stringify(state); sha = f.sha; openItems = new WeakSet();
+        hideModal('#m-publish'); renderNav(); renderPage(true); changed();
+        toast('Загружена свежая версия с сайта', 'ok');
+      }).catch(function (x) { $('#pub-err').textContent = errText(x); });
     });
   }
   function watchLive(json) {

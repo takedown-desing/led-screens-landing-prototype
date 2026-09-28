@@ -78,12 +78,9 @@
       if (cur.sha !== expect.sha) { var ce = new Error('conflict'); ce.code = 'conflict'; throw ce; }
     }
     var commit = await this.req('GET', b + '/git/commits/' + head);
-    var tree = [], shas = {};
-    for (var i = 0; i < files.length; i++) {
-      var blob = await this.req('POST', b + '/git/blobs', { content: files[i].b64, encoding: 'base64' });
-      shas[files[i].path] = blob.sha;
-      tree.push({ path: files[i].path, mode: '100644', type: 'blob', sha: blob.sha });
-    }
+    var self = this, shas = {};
+    var blobs = await Promise.all(files.map(function (f) { return self.req('POST', b + '/git/blobs', { content: f.b64, encoding: 'base64' }); }));
+    var tree = files.map(function (f, i) { shas[f.path] = blobs[i].sha; return { path: f.path, mode: '100644', type: 'blob', sha: blobs[i].sha }; });
     var newTree = await this.req('POST', b + '/git/trees', { base_tree: commit.tree.sha, tree: tree });
     var newCommit = await this.req('POST', b + '/git/commits', { message: message, tree: newTree.sha, parents: [head] });
     try {

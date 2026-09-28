@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%277%27 fill=%27%230F172A%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-size=%2714%27 font-family=%27Arial%27 font-weight=%27700%27 fill=%27%2322D3EE%27 text-anchor=%27middle%27%3EA%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="admin.css?v=1">
+<link rel="stylesheet" href="admin.css?v=3">
 </head>
 <body>
 
@@ -77,7 +77,7 @@
     <label class="fld"><span class="fl">Что изменили</span><input type="text" id="pub-msg" maxlength="120"></label>
     <p class="fh">Описание попадёт в историю изменений, по нему удобно найти и вернуть прошлую версию.</p>
     <p class="err" id="pub-err"></p>
-    <div class="row end"><button type="button" class="btn ghost" data-close>Отмена</button><button type="submit" class="btn primary">Опубликовать</button></div>
+    <div class="row end"><button type="button" class="btn ghost" id="pub-reload" hidden>Загрузить свежую версию</button><button type="button" class="btn ghost" data-close>Отмена</button><button type="submit" class="btn primary">Опубликовать</button></div>
   </form>
 </div>
 
@@ -92,8 +92,8 @@
 </div>
 
 <script src="../assets/render.js?v=3"></script>
-<script src="github.js?v=1"></script>
+<script src="github.js?v=2"></script>
 <script src="schema.js?v=1"></script>
-<script src="admin.js?v=2"></script>
+<script src="admin.js?v=3"></script>
 </body>
 </html>

@@ -151,8 +151,8 @@ code{background:var(--surface-2);border:1px solid var(--line);border-radius:4px;
 /* Узкие экраны: предпросмотр по кнопке */
 @media (max-width:1180px){
   .layout{grid-template-columns:200px 1fr}
-  .preview{position:fixed;inset:var(--top) 0 0 auto;width:min(560px,100%);z-index:20;transform:translateX(100%);transition:transform .2s;box-shadow:-10px 0 30px rgba(15,23,42,.2)}
-  body.pv-open .preview{transform:none}
+  .preview{position:fixed;inset:var(--top) 0 0 auto;width:min(560px,100%);z-index:20;transform:translateX(100%);transition:transform .2s;visibility:hidden}
+  body.pv-open .preview{transform:none;visibility:visible;box-shadow:-10px 0 30px rgba(15,23,42,.2)}
   .pv-toggle{display:block;position:fixed;right:16px;bottom:16px;z-index:30;background:#0F172A;color:#fff;border:0;border-radius:99px;padding:10px 16px;font-weight:600;cursor:pointer;box-shadow:0 8px 24px rgba(15,23,42,.3)}
   body.pv-open .pv-toggle{background:var(--brand)}
   .toasts{bottom:70px}
@@ -163,6 +163,7 @@ code{background:var(--surface-2);border:1px solid var(--line);border-radius:4px;
   .top{height:auto;flex-wrap:wrap;padding:10px 12px;gap:8px}
   .top .grow{display:none}
   .brand small{display:none}
+  .mode{white-space:normal;flex-wrap:wrap;gap:2px 10px;border-radius:10px;max-width:100%}
   .layout{display:block;height:auto}
   .nav{display:flex;overflow-x:auto;border-right:0;border-bottom:1px solid var(--line);padding:6px;gap:2px}
   .ng{display:none}
