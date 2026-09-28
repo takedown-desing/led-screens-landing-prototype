@@ -125,7 +125,7 @@
     return '<div class="drawer"><div class="panel"><button class="close" data-close-menu aria-label="Закрыть">✕</button>' +
       '<h4>Разделы</h4>' + menuLinks(c) +
       '<h4>Связь</h4><a href="' + tel(s.phone) + '">' + esc(s.phone) + '</a><a href="mailto:' + attr(s.email) + '">' + esc(s.email) + '</a>' +
-      messengers(c) + '</div></div>';
+      messengers(c, 'msg-link') + '</div></div>';
   };
 
   R.hero = function (c) {
@@ -331,7 +331,7 @@
       '<div class="legal" data-cms="Реквизиты">' + t(x.legal) + (x.note ? '<br>' + t(x.note) : '') + '</div></div>' +
       '<div><h4>Разделы</h4>' + menuLinks(c) + '</div>' +
       '<div><h4>Связь</h4><a href="' + tel(s.phone) + '">' + esc(s.phone) + '</a><a href="mailto:' + attr(s.email) + '">' + esc(s.email) + '</a>' +
-      messengers(c) + '<a href="' + attr(s.policyUrl || '#') + '">Политика обработки персональных данных</a></div>' +
+      messengers(c, 'msg-link') + '<a href="' + attr(s.policyUrl || '#') + '">Политика обработки персональных данных</a></div>' +
       '</div></footer>';
   };
 

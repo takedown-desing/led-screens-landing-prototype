@@ -150,5 +150,10 @@
     qsa('#app section[id], #app .trust[id], #app .cta-band[id]').forEach(function (s) { io.observe(s); });
   }
 
+  /* Класс scrolled: прячет ярлык прототипа у липкой шапки при прокрутке */
+  function onScroll() { d.body.classList.toggle('scrolled', window.scrollY > 120); }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
   window.LandingApp = { afterRender: function () { updCalc(); observeNav(); } };
 })();

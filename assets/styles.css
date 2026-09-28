@@ -383,3 +383,11 @@ html.is-preview .proto-bar{display:none}
 html.is-preview .header{top:0}
 html.is-preview .hero.blk::before{top:10px}
 .case .media .dur:empty{display:none}
+
+/* Ссылки мессенджеров в подвале и мобильном меню: иконка 16px слева от названия */
+.footer a.msg-link,.drawer a.msg-link{display:flex;align-items:center;gap:8px}
+.footer a.msg-link svg,.drawer a.msg-link svg{width:16px;height:16px;flex:none}
+/* Мобильное меню поверх панели прототипа, чтобы крестик был доступен */
+.drawer{z-index:1050}
+/* Ярлык шапки не висит над контентом при прокрутке */
+.scrolled .header.blk::before{display:none}
