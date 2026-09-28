@@ -373,3 +373,13 @@ ul{margin:0}
 .chip-list span{background:var(--surface-2);border:1px solid var(--line);border-radius:99px;padding:5px 11px;font-size:13px}
 @media (max-width:900px){.ov-links,.media-grid{grid-template-columns:1fr 1fr}}
 @media (max-width:600px){.ov-links,.media-grid{grid-template-columns:1fr}}
+
+/* ---------- Сборка из JSON и предпросмотр в админке ---------- */
+.part{display:contents}
+#app:empty{min-height:100vh}
+#app:empty::before{content:"Загрузка…";display:block;padding:120px 24px;text-align:center;color:var(--muted)}
+html.is-preview body{padding-top:0}
+html.is-preview .proto-bar{display:none}
+html.is-preview .header{top:0}
+html.is-preview .hero.blk::before{top:10px}
+.case .media .dur:empty{display:none}

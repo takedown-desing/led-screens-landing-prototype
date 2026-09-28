@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Админка лендинга LED-экранов</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%277%27 fill=%27%230F172A%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-size=%2714%27 font-family=%27Arial%27 font-weight=%27700%27 fill=%27%2322D3EE%27 text-anchor=%27middle%27%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="admin.css?v=1">
+</head>
+<body>
+
+<header class="top">
+  <a class="brand" href="../index.html" title="Обзор прототипа"><span class="mk">A</span><span><b>Админка лендинга</b><small>LED-экраны, Москва и МО</small></span></a>
+  <div class="mode" id="mode"></div>
+  <span class="dirty" id="dirty"></span>
+  <span class="live" id="live"></span>
+  <span class="grow"></span>
+  <button class="btn ghost" id="btn-history" hidden>История</button>
+  <button class="btn ghost" id="btn-reset" disabled>Сбросить</button>
+  <button class="btn ghost" id="btn-download" title="Скачать текущий контент файлом landing.json">Скачать JSON</button>
+  <button class="btn primary" id="btn-publish" disabled title="Ctrl+S">Опубликовать</button>
+</header>
+
+<div class="layout">
+  <nav class="nav" id="nav"></nav>
+  <main class="editor" id="editor"><p class="fh" style="padding:24px">Загрузка…</p></main>
+  <aside class="preview">
+    <div class="pv-bar">
+      <b>Предпросмотр</b>
+      <span class="seg"><button type="button" class="on" data-device="desktop">Компьютер</button><button type="button" data-device="mobile">Телефон</button></span>
+      <span class="grow"></span>
+      <a class="lnk" href="../landing.html" target="_blank" rel="noopener">Открыть сайт</a>
+    </div>
+    <div class="pv-box" id="pv-box"><iframe id="pv" title="Предпросмотр лендинга"></iframe></div>
+  </aside>
+</div>
+<button class="pv-toggle" id="pv-toggle" type="button">Предпросмотр</button>
+
+<datalist id="media-list"></datalist>
+<div class="toasts" id="toasts"></div>
+
+<!-- Вход для публикации -->
+<div class="modal" id="m-login">
+  <form class="box" id="login-form">
+    <button type="button" class="x" data-close aria-label="Закрыть">✕</button>
+    <h2>Подключить публикацию</h2>
+    <p>Правки публикуются в репозиторий <a id="repo-link" target="_blank" rel="noopener">на GitHub</a>, сайт обновляется сам примерно за минуту. Для входа нужен токен GitHub с правом записи в этот репозиторий.</p>
+    <details class="how">
+      <summary>Как получить токен (2 минуты)</summary>
+      <ol>
+        <li>Войдите на GitHub под аккаунтом с доступом к репозиторию.</li>
+        <li>Откройте <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a>.</li>
+        <li>Token name: «Админка лендинга». Expiration: срок действия, например 90 дней.</li>
+        <li>Repository access: <b>Only select repositories</b>, выберите <b>led-screens-landing-prototype</b>.</li>
+        <li>Permissions → Repository permissions → <b>Contents: Read and write</b>.</li>
+        <li>Нажмите Generate token, скопируйте токен и вставьте ниже.</li>
+      </ol>
+    </details>
+    <label class="fld"><span class="fl">Токен GitHub</span><input type="password" id="login-token" autocomplete="off" placeholder="github_pat_…"></label>
+    <label class="chk"><input type="checkbox" id="login-remember" checked> <span>Запомнить в этом браузере</span></label>
+    <p class="fh">Токен хранится только в вашем браузере и отправляется только на api.github.com.</p>
+    <p class="err" id="login-err"></p>
+    <div class="row end"><button type="button" class="btn ghost" data-close>Отмена</button><button type="submit" class="btn primary">Подключить</button></div>
+  </form>
+</div>
+
+<!-- Публикация -->
+<div class="modal" id="m-publish">
+  <form class="box" id="pub-form">
+    <button type="button" class="x" data-close aria-label="Закрыть">✕</button>
+    <h2>Опубликовать изменения</h2>
+    <p id="pub-files" class="fh"></p>
+    <label class="fld"><span class="fl">Что изменили</span><input type="text" id="pub-msg" maxlength="120"></label>
+    <p class="fh">Описание попадёт в историю изменений, по нему удобно найти и вернуть прошлую версию.</p>
+    <p class="err" id="pub-err"></p>
+    <div class="row end"><button type="button" class="btn ghost" data-close>Отмена</button><button type="submit" class="btn primary">Опубликовать</button></div>
+  </form>
+</div>
+
+<!-- История -->
+<div class="modal" id="m-history">
+  <div class="box wide">
+    <button type="button" class="x" data-close aria-label="Закрыть">✕</button>
+    <h2>История изменений</h2>
+    <p class="fh">Любую прошлую версию можно открыть в редакторе и опубликовать заново.</p>
+    <div id="hist-list"></div>
+  </div>
+</div>
+
+<script src="../assets/render.js?v=3"></script>
+<script src="github.js?v=1"></script>
+<script src="schema.js?v=1"></script>
+<script src="admin.js?v=2"></script>
+</body>
+</html>

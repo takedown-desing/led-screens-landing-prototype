@@ -1,159 +1,154 @@
-/* Прототип лендинга LED-экранов: интерактив без зависимостей. */
+/* Прототип лендинга LED-экранов: интерактив без зависимостей.
+   Все обработчики делегированы на document, поэтому работают после любой перерисовки из render.js. */
 (function () {
   var d = document;
   function qs(s, r) { return (r || d).querySelector(s); }
   function qsa(s, r) { return Array.prototype.slice.call((r || d).querySelectorAll(s)); }
+  function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
 
-  /* Пометки блоков: показать / скрыть, состояние в localStorage */
-  var toggle = qs('[data-toggle-tags]');
-  try { if (localStorage.getItem('led-hide-tags') === '1') d.body.classList.add('hide-tags'); } catch (e) {}
-  function syncToggle() {
-    if (!toggle) return;
-    toggle.textContent = d.body.classList.contains('hide-tags') ? 'Показать пометки' : 'Скрыть пометки';
-  }
-  syncToggle();
-  if (toggle) toggle.addEventListener('click', function () {
-    d.body.classList.toggle('hide-tags');
-    try { localStorage.setItem('led-hide-tags', d.body.classList.contains('hide-tags') ? '1' : '0'); } catch (e) {}
-    syncToggle();
-  });
-
-  /* Подсветка управляемых полей (что редактируется в админке) */
-  var cmsToggle = qs('[data-toggle-cms]');
-  try { if (localStorage.getItem('led-show-cms') === '1') d.body.classList.add('show-cms'); } catch (e) {}
-  function syncCms() {
-    if (!cmsToggle) return;
-    var on = d.body.classList.contains('show-cms');
-    cmsToggle.classList.toggle('on', on);
-    cmsToggle.textContent = on ? 'Скрыть управляемые поля' : 'Управляемые поля';
-  }
-  syncCms();
-  if (cmsToggle) cmsToggle.addEventListener('click', function () {
-    d.body.classList.toggle('show-cms');
-    try { localStorage.setItem('led-show-cms', d.body.classList.contains('show-cms') ? '1' : '0'); } catch (e) {}
-    syncCms();
-  });
-
-  /* Мобильное меню */
-  var drawer = qs('.drawer');
-  qsa('[data-open-menu]').forEach(function (b) { b.addEventListener('click', function () { drawer && drawer.classList.add('open'); }); });
-  qsa('[data-close-menu]').forEach(function (b) { b.addEventListener('click', function () { drawer && drawer.classList.remove('open'); }); });
-  if (drawer) {
-    drawer.addEventListener('click', function (e) { if (e.target === drawer) drawer.classList.remove('open'); });
-    qsa('a[href^="#"]', drawer).forEach(function (a) { a.addEventListener('click', function () { drawer.classList.remove('open'); }); });
-  }
-
-  /* Модальное окно заявки: заголовок, подпись и тип экрана подставляются из кнопки */
-  var modal = qs('.modal');
-  function openModal(title, sub, product) {
-    if (!modal) return;
-    if (title) qs('.modal h3').textContent = title;
-    if (sub) qs('.modal .sub').textContent = sub;
-    var pl = qs('.modal .prod-line');
-    if (pl) pl.style.display = product ? 'flex' : 'none';
-    if (pl && product) qs('.modal .prod-line b').textContent = product;
-    var sel = qs('.modal select[name="type"]');
-    if (sel && product) {
-      qsa('option', sel).forEach(function (o) { if (product.indexOf(o.textContent.split(' ')[0]) === 0 || o.textContent === product) sel.value = o.value; });
+  /* Панель прототипа: пометки блоков и подсветка управляемых полей */
+  var tagsBtn = qs('[data-toggle-tags]'), cmsBtn = qs('[data-toggle-cms]');
+  if (store('led-hide-tags') === '1') d.body.classList.add('hide-tags');
+  if (store('led-show-cms') === '1') d.body.classList.add('show-cms');
+  function syncBar() {
+    if (tagsBtn) tagsBtn.textContent = d.body.classList.contains('hide-tags') ? 'Показать пометки' : 'Скрыть пометки';
+    if (cmsBtn) {
+      var on = d.body.classList.contains('show-cms');
+      cmsBtn.classList.toggle('on', on);
+      cmsBtn.textContent = on ? 'Скрыть управляемые поля' : 'Управляемые поля';
     }
-    modal.classList.add('open');
-    var first = qs('input', modal); if (first) setTimeout(function () { first.focus(); }, 50);
   }
-  qsa('[data-ask]').forEach(function (b) {
-    b.addEventListener('click', function (e) {
-      e.preventDefault();
-      openModal(b.getAttribute('data-ask-title'), b.getAttribute('data-ask-sub'), b.getAttribute('data-ask-product'));
-    });
+  syncBar();
+  if (tagsBtn) tagsBtn.addEventListener('click', function () {
+    d.body.classList.toggle('hide-tags'); store('led-hide-tags', d.body.classList.contains('hide-tags') ? '1' : '0'); syncBar();
   });
-  qsa('[data-close-modal]').forEach(function (b) { b.addEventListener('click', function () { modal && modal.classList.remove('open'); }); });
-  if (modal) modal.addEventListener('click', function (e) { if (e.target === modal) modal.classList.remove('open'); });
-  d.addEventListener('keydown', function (e) { if (e.key === 'Escape') { modal && modal.classList.remove('open'); drawer && drawer.classList.remove('open'); } });
-
-  /* Все формы прототипа: не отправляем, показываем подтверждение */
-  qsa('form').forEach(function (f) {
-    f.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var btn = qs('button[type="submit"]', f);
-      var msg = f.getAttribute('data-done') || 'Заявка принята, Иван перезвонит в рабочее время';
-      if (btn) { btn.textContent = msg; btn.disabled = true; }
-    });
+  if (cmsBtn) cmsBtn.addEventListener('click', function () {
+    d.body.classList.toggle('show-cms'); store('led-show-cms', d.body.classList.contains('show-cms') ? '1' : '0'); syncBar();
   });
 
-  /* Фильтр кейсов по типу */
-  qsa('[data-tabs]').forEach(function (wrap) {
-    var tabs = qsa('.tab', wrap);
+  function drawer() { return qs('.drawer'); }
+  function modal() { return qs('.modal'); }
+  function closeAll() { var dr = drawer(), m = modal(); if (dr) dr.classList.remove('open'); if (m) m.classList.remove('open'); }
+
+  function openModal(b) {
+    var m = modal(); if (!m) return;
+    var title = b.getAttribute('data-ask-title'), sub = b.getAttribute('data-ask-sub');
+    var product = b.getAttribute('data-ask-product'), type = b.getAttribute('data-ask-type');
+    if (title) qs('h3', m).textContent = title;
+    if (sub) qs('.sub', m).textContent = sub;
+    var pl = qs('.prod-line', m);
+    if (pl) { pl.style.display = product ? 'flex' : 'none'; if (product) qs('b', pl).textContent = product; }
+    var sel = qs('select[name="type"]', m);
+    if (sel && type && qs('option[value="' + type + '"]', sel)) sel.value = type;
+    var f = qs('form', m), btn = f && qs('button[type="submit"]', f);
+    if (btn && btn.disabled) { btn.disabled = false; btn.textContent = 'Отправить'; }
+    m.classList.add('open');
+    var first = qs('input[type="text"]', m); if (first) setTimeout(function () { first.focus(); }, 50);
+  }
+
+  function applyFilter(id) {
+    var wrap = qs('[data-tabs]'); if (!wrap) return;
     var target = qs(wrap.getAttribute('data-tabs'));
-    tabs.forEach(function (t) {
-      t.addEventListener('click', function () {
-        tabs.forEach(function (x) { x.classList.remove('active'); });
-        t.classList.add('active');
-        var f = t.getAttribute('data-filter');
-        qsa('[data-type]', target).forEach(function (c) {
-          c.hidden = !(f === 'all' || c.getAttribute('data-type').split(' ').indexOf(f) > -1);
-        });
-      });
+    var tab = qs('.tab[data-filter="' + id + '"]', wrap) || qs('.tab[data-filter="all"]', wrap);
+    if (!tab) return;
+    var f = tab.getAttribute('data-filter');
+    qsa('.tab', wrap).forEach(function (x) { x.classList.toggle('active', x === tab); });
+    qsa('[data-type]', target).forEach(function (c) {
+      c.hidden = !(f === 'all' || c.getAttribute('data-type').split(' ').indexOf(f) > -1);
     });
-  });
+  }
 
-  /* Видео кейсов: клик по превью запускает ролик, остальные ставятся на паузу */
-  qsa('.case .media').forEach(function (m) {
-    var v = qs('video', m);
-    if (!v) return;
-    m.addEventListener('click', function () {
+  d.addEventListener('click', function (e) {
+    var t = e.target, el;
+    if (!t.closest) return;
+    if (t.closest('[data-open-menu]')) { var dr = drawer(); if (dr) dr.classList.add('open'); return; }
+    if (t.closest('[data-close-menu]') || t.classList.contains('drawer')) { closeAll(); return; }
+    if (t.closest('.drawer a[href^="#"]')) { closeAll(); }
+    if ((el = t.closest('[data-ask]'))) { e.preventDefault(); closeAll(); openModal(el); return; }
+    if (t.closest('[data-close-modal]') || t.classList.contains('modal')) { closeAll(); return; }
+    if ((el = t.closest('[data-tabs] .tab'))) { applyFilter(el.getAttribute('data-filter')); return; }
+    if ((el = t.closest('[data-case-filter]'))) { applyFilter(el.getAttribute('data-case-filter')); }
+    if ((el = t.closest('.case .media'))) {
+      var v = qs('video', el); if (!v) return;
       if (v.paused) {
         qsa('.case .media video').forEach(function (o) { if (o !== v) { o.pause(); o.parentNode.classList.remove('playing'); } });
-        v.play(); m.classList.add('playing');
-      } else { v.pause(); m.classList.remove('playing'); }
-    });
-    v.addEventListener('ended', function () { m.classList.remove('playing'); });
-    v.addEventListener('loadedmetadata', function () {
-      var dur = qs('.dur', m);
-      if (dur && isFinite(v.duration)) dur.textContent = Math.round(v.duration) + ' с';
-    });
+        v.play(); el.classList.add('playing');
+      } else { v.pause(); el.classList.remove('playing'); }
+    }
   });
 
-  /* Калькулятор: площадь и ориентировочная стоимость «от». Ставки условные, помечены заливкой. */
-  var calc = qs('[data-calc]');
-  if (calc) {
-    var rates = { transparent: 120000, outdoor: 85000, indoor: 140000, flex: 160000 };
-    var names = { transparent: 'Прозрачный', outdoor: 'Уличный / медиафасад', indoor: 'Интерьерный', flex: 'Гибкий / криволинейный' };
-    var w = qs('[name="w"]', calc), h = qs('[name="h"]', calc), t = qs('[name="type"]', calc), mnt = qs('[name="mount"]', calc);
-    var outArea = qs('[data-out="area"]'), outPrice = qs('[data-out="price"]'), outType = qs('[data-out="type"]'), outMount = qs('[data-out="mount"]'), outPx = qs('[data-out="px"]');
-    function fmt(n) { return n.toLocaleString('ru-RU'); }
-    function upd() {
-      var W = parseFloat(w.value) || 0, H = parseFloat(h.value) || 0, area = Math.round(W * H * 100) / 100;
-      var base = area * (rates[t.value] || 0);
-      var mountCost = mnt.checked ? Math.round(base * 0.15) : 0;
-      if (outArea) outArea.textContent = area ? fmt(area) + ' м²' : '—';
-      if (outType) outType.textContent = names[t.value] || '—';
-      if (outMount) outMount.textContent = mnt.checked ? 'включён, ~15% от экрана' : 'не включён';
-      if (outPx) outPx.textContent = { transparent: 'P3.9–P7.8', outdoor: 'P4–P10', indoor: 'P1.8–P3', flex: 'P2.5–P4' }[t.value] || '—';
-      if (outPrice) outPrice.textContent = area ? 'от ' + fmt(Math.round((base + mountCost) / 1000) * 1000) + ' ₽' : 'укажите размеры';
-      var btn = qs('[data-ask]', calc.parentNode.parentNode);
-      if (btn) btn.setAttribute('data-ask-product', (names[t.value] || 'Экран') + ', ' + (W || '?') + '×' + (H || '?') + ' м, ' + (area || '?') + ' м²');
-    }
-    [w, h, t, mnt].forEach(function (el) { el && el.addEventListener('input', upd); el && el.addEventListener('change', upd); });
-    upd();
-  }
+  d.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAll(); });
 
-  /* Маска телефона: только цифры, +7 в начале */
-  qsa('input[type="tel"]').forEach(function (i) {
-    i.addEventListener('input', function () {
+  /* Формы прототипа: не отправляем, показываем подтверждение */
+  d.addEventListener('submit', function (e) {
+    var f = e.target; e.preventDefault();
+    if (f.hasAttribute('data-calc')) return;
+    var btn = qs('button[type="submit"]', f);
+    var msg = f.getAttribute('data-done') || 'Заявка принята';
+    if (btn) { btn.textContent = msg; btn.disabled = true; }
+  });
+
+  d.addEventListener('input', function (e) {
+    var i = e.target;
+    if (i.type === 'tel') {
       var v = i.value.replace(/[^\d+]/g, '');
       if (v && v[0] !== '+') v = '+' + v;
       i.value = v.slice(0, 13);
-    });
+    }
+    if (i.closest && i.closest('[data-calc]')) updCalc();
   });
+  d.addEventListener('change', function (e) { if (e.target.closest && e.target.closest('[data-calc]')) updCalc(); });
 
-  /* Подсветка активного пункта меню при прокрутке */
-  var secs = qsa('section[id], div.trust[id]');
-  var links = qsa('.hdr-nav a[href^="#"]');
-  if (secs.length && links.length && 'IntersectionObserver' in window) {
-    var io = new IntersectionObserver(function (es) {
-      es.forEach(function (e) {
-        if (e.isIntersecting) links.forEach(function (l) { l.style.color = l.getAttribute('href') === '#' + e.target.id ? '#22D3EE' : ''; });
+  /* Длительность видео кейсов */
+  d.addEventListener('loadedmetadata', function (e) {
+    var v = e.target;
+    if (v.tagName !== 'VIDEO') return;
+    var dur = v.parentNode && qs('.dur', v.parentNode);
+    if (dur && isFinite(v.duration)) dur.textContent = Math.round(v.duration) + ' с';
+  }, true);
+  d.addEventListener('ended', function (e) {
+    var m = e.target.closest && e.target.closest('.case .media'); if (m) m.classList.remove('playing');
+  }, true);
+
+  /* Калькулятор: ставки и шаг приходят из атрибутов option, их задают в типах экранов */
+  function fmt(n) { return n.toLocaleString('ru-RU'); }
+  function num(el) { return el ? parseFloat(String(el.value).replace(',', '.')) || 0 : 0; }
+  function updCalc() {
+    var f = qs('[data-calc]'); if (!f) return;
+    var sec = f.closest('section') || d;
+    var W = num(qs('[name="w"]', f)), H = num(qs('[name="h"]', f));
+    var sel = qs('[name="calctype"]', f), opt = sel && sel.options[sel.selectedIndex];
+    var rate = opt ? Number(opt.getAttribute('data-rate')) : 0;
+    var share = Number(f.getAttribute('data-mount-share')) || 0;
+    var mount = qs('[name="mount"]', f), withMount = mount && mount.checked;
+    var area = Math.round(W * H * 100) / 100, base = area * rate, mc = withMount ? Math.round(base * share / 100) : 0;
+    function out(k, v) { var el = qs('[data-out="' + k + '"]', sec); if (el) el.textContent = v; }
+    var name = opt ? opt.getAttribute('data-name') : '';
+    out('area', area ? fmt(area) + ' м²' : '—');
+    out('type', name || '—');
+    out('px', (opt && opt.getAttribute('data-px')) || '—');
+    out('mount', withMount ? 'включён, ~' + share + '% от экрана' : 'не включён');
+    out('price', area && rate ? 'от ' + fmt(Math.round((base + mc) / 1000) * 1000) + ' ₽' : (rate ? 'укажите размеры' : 'нет типов со ставкой'));
+    var btn = qs('[data-calc-ask]', sec);
+    if (btn) {
+      btn.setAttribute('data-ask-product', (name || 'Экран') + ', ' + (W || '?') + '×' + (H || '?') + ' м, ' + (area || '?') + ' м²');
+      if (opt) btn.setAttribute('data-ask-type', opt.value);
+    }
+  }
+
+  /* Подсветка пункта меню при прокрутке */
+  var io = null;
+  function observeNav() {
+    if (io) io.disconnect();
+    var links = qsa('.hdr-nav a[href^="#"]');
+    if (!links.length || !('IntersectionObserver' in window)) return;
+    io = new IntersectionObserver(function (es) {
+      es.forEach(function (en) {
+        if (en.isIntersecting) links.forEach(function (l) { l.style.color = l.getAttribute('href') === '#' + en.target.id ? '#22D3EE' : ''; });
       });
     }, { rootMargin: '-40% 0px -55% 0px' });
-    secs.forEach(function (s) { io.observe(s); });
+    qsa('#app section[id], #app .trust[id], #app .cta-band[id]').forEach(function (s) { io.observe(s); });
   }
+
+  window.LandingApp = { afterRender: function () { updCalc(); observeNav(); } };
 })();
