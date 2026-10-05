@@ -156,8 +156,7 @@
   R.header = function (c) {
     var s = c.settings || {}, h = c.hero || {};
     return '<header class="hdr" data-hdr><div class="hdr__wrap"><nav class="hdr__pill" aria-label="Основное меню">' +
-      '<a class="hdr__logo" href="#top" aria-label="' + attr(s.brandName) + '"><span class="logo-mark">' + esc(s.brandMark) + '</span>' +
-      '<span class="hdr__name"><b>' + t(s.brandName) + '</b><small>' + t(s.brandTagline) + '</small></span></a>' +
+      '<a class="hdr__logo" href="#top" aria-label="' + attr(s.brandName) + '">' + '<img class="brand-logo" src="../logos/v3-logo.svg" alt="' + attr(s.brandName) + '" width="183" height="48">' + '</a>' +
       '<div class="hdr__links">' + menuLinks(c) + '</div>' +
       '<div class="hdr__right">' +
       (s.phone ? '<a class="hdr__phone" href="' + tel(s.phone) + '"><b>' + esc(s.phone) + '</b>' +
@@ -458,7 +457,7 @@
   R.footer = function (c) {
     var x = c.footer || {}, s = c.settings || {};
     return '<footer class="foot"><div class="wrap"><div class="foot__grid">' +
-      '<div class="foot__brand"><a class="foot__logo" href="#top"><span class="logo-mark">' + esc(s.brandMark) + '</span><b>' + t(s.brandName) + '</b></a>' +
+      '<div class="foot__brand"><a class="foot__logo" href="#top">' + '<img class="brand-logo" src="../logos/v3-logo-white.svg" alt="' + attr(s.brandName) + '" width="183" height="48">' + '</a>' +
       (x.about ? '<p>' + t(x.about) + '</p>' : '') + '</div>' +
       '<nav class="foot__col"><h4>Разделы</h4>' + menuLinks(c) + '</nav>' +
       '<div class="foot__col"><h4>Связь</h4>' + (s.phone ? '<a class="foot__phone" href="' + tel(s.phone) + '">' + esc(s.phone) + '</a>' : '') +
@@ -479,7 +478,7 @@
     return '<div class="modal" data-modal aria-hidden="true"><div class="modal__bg" data-close-modal></div>' +
       '<div class="modal__box" role="dialog" aria-modal="true" aria-labelledby="modal-title">' +
       '<button class="modal__x" type="button" data-close-modal aria-label="Закрыть">' + svg('close') + '</button>' +
-      '<span class="logo-mark modal__mark">' + esc(s.brandMark) + '</span>' +
+      '<img class="modal__mark modal__mark--img" src="../logos/v3-mark.svg" alt="" width="44" height="44">' +
       '<h3 id="modal-title" data-m-title>' + t(h.formTitle || 'Получить расчёт экрана') + '</h3>' +
       '<p class="modal__sub" data-m-sub>' + t(h.formSub || '') + '</p>' +
       '<div class="modal__prod" data-m-prod hidden>Задача: <b></b></div>' +

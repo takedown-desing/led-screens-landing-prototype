@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Логотипы ХЭНПЭН: три варианта</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#0B1220; --muted:#5B6577; --line:#E3E7EE; --bg:#F4F6FA; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:Manrope,system-ui,sans-serif; color:var(--ink); background:var(--bg); }
+  .wrap { max-width:1180px; margin:0 auto; padding:48px 24px 80px; }
+  a.back { color:var(--ink); font-weight:600; font-size:14px; }
+  h1 { font-size:clamp(28px,4vw,44px); letter-spacing:-.03em; margin:14px 0 8px; }
+  .lead { color:var(--muted); margin:0 0 36px; line-height:1.6; max-width:680px; }
+  .row { background:#fff; border:1px solid var(--line); border-radius:24px; padding:24px; margin-bottom:20px; }
+  .row h2 { font-size:20px; margin:0 0 4px; }
+  .row p { color:var(--muted); font-size:14px; margin:0 0 18px; line-height:1.55; }
+  .tiles { display:grid; grid-template-columns:1.3fr 1.3fr .6fr; gap:14px; }
+  .tile { border-radius:16px; min-height:150px; display:flex; align-items:center; justify-content:center; padding:24px; position:relative; }
+  .tile img { max-width:100%; height:auto; }
+  .tile.big img { height:56px; }
+  .tile.mark img { width:72px; height:72px; }
+  .tile small { position:absolute; left:14px; bottom:10px; font-size:11px; color:var(--muted); }
+  .tile.dark small { color:#8b93a3; }
+  .light { background:#fff; border:1px solid var(--line); }
+  .gray { background:#EFEFEF; }
+  .dark { background:#0B1220; }
+  .black { background:#000; }
+  .files { margin-top:14px; font-size:13px; color:var(--muted); display:flex; gap:14px; flex-wrap:wrap; }
+  .files a { color:var(--ink); }
+  @media (max-width:860px) { .tiles { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../">← Все варианты дизайна</a>
+  <h1>Логотипы ХЭНПЭН</h1>
+  <p class="lead">По одному логотипу на каждый вариант дизайна. Буквы переведены в кривые, поэтому файлы не зависят от шрифтов и одинаково выглядят везде. У каждого логотипа три файла: основной, белый для тёмного фона и знак без надписи для иконки сайта и аватарок.</p>
+
+  <div class="row">
+    <h2>Вариант 1 · Светлый</h2>
+    <p>Тёмный круг с сеткой 3×3 пикселя, оранжевые пиксели зажжены по диагонали, как световой импульс по экрану. Надпись Inter Tight SemiBold.</p>
+    <div class="tiles">
+      <div class="tile big gray"><img src="v1-logo.svg" alt="ХЭНПЭН"><small>на светлом</small></div>
+      <div class="tile big dark"><img src="v1-logo-white.svg" alt="ХЭНПЭН"><small>на тёмном</small></div>
+      <div class="tile mark light"><img src="v1-mark.svg" alt="Знак ХЭНПЭН"><small>знак</small></div>
+    </div>
+    <div class="files"><a href="v1-logo.svg">v1-logo.svg</a><a href="v1-logo-white.svg">v1-logo-white.svg</a><a href="v1-mark.svg">v1-mark.svg</a></div>
+  </div>
+
+  <div class="row">
+    <h2>Вариант 2 · Контраст</h2>
+    <p>Оранжевый квадрат с белыми строками, как бегущая строка на экране. Надпись Manrope ExtraBold с разрядкой, в духе крупных заглавных заголовков варианта.</p>
+    <div class="tiles">
+      <div class="tile big black"><img src="v2-logo-white.svg" alt="ХЭНПЭН"><small>на чёрном (основной)</small></div>
+      <div class="tile big light"><img src="v2-logo.svg" alt="ХЭНПЭН"><small>на светлом</small></div>
+      <div class="tile mark light"><img src="v2-mark.svg" alt="Знак ХЭНПЭН"><small>знак</small></div>
+    </div>
+    <div class="files"><a href="v2-logo-white.svg">v2-logo-white.svg</a><a href="v2-logo.svg">v2-logo.svg</a><a href="v2-mark.svg">v2-mark.svg</a></div>
+  </div>
+
+  <div class="row">
+    <h2>Вариант 3 · Stitch</h2>
+    <p>Синий квадрат с четырьмя пикселями, один светится LED-градиентом cyan → magenta, как свечение вокруг видео в макете. Надпись Onest ExtraBold.</p>
+    <div class="tiles">
+      <div class="tile big light"><img src="v3-logo.svg" alt="ХЭНПЭН"><small>на светлом</small></div>
+      <div class="tile big dark"><img src="v3-logo-white.svg" alt="ХЭНПЭН"><small>на тёмном</small></div>
+      <div class="tile mark light"><img src="v3-mark.svg" alt="Знак ХЭНПЭН"><small>знак</small></div>
+    </div>
+    <div class="files"><a href="v3-logo.svg">v3-logo.svg</a><a href="v3-logo-white.svg">v3-logo-white.svg</a><a href="v3-mark.svg">v3-mark.svg</a></div>
+  </div>
+</div>
+</body>
+</html>

@@ -128,8 +128,7 @@
   R.header = function (c) {
     var s = c.settings || {}, h = c.hero || {};
     return '<header class="hdr" data-hdr><div class="wrap hdr__wrap"><nav class="hdr__pill" aria-label="Основное меню">' +
-      '<a class="hdr__logo" href="#top" aria-label="' + attr(s.brandName) + '"><span class="hdr__mark">' + esc(s.brandMark) + '</span>' +
-      '<span class="hdr__name"><b>' + t(s.brandName) + '</b><small>' + t(s.brandTagline) + '</small></span></a>' +
+      '<a class="hdr__logo" href="#top" aria-label="' + attr(s.brandName) + '">' + '<img class="brand-logo" src="../logos/v1-logo.svg" alt="' + attr(s.brandName) + '" width="183" height="48">' + '</a>' +
       '<div class="hdr__links">' + menuLinks(c) + '</div>' +
       '<div class="hdr__right">' +
       (s.phone ? '<a class="hdr__phone" href="' + tel(s.phone) + '"><i class="live"></i><span>' + esc(s.phone) + '</span></a>' : '') +
@@ -416,7 +415,7 @@
   R.footer = function (c) {
     var x = c.footer || {}, s = c.settings || {};
     return '<footer class="foot tone-dark"><div class="wrap"><div class="foot__grid">' +
-      '<div class="foot__brand"><a class="foot__logo" href="#top"><span class="hdr__mark">' + esc(s.brandMark) + '</span><b>' + t(s.brandName) + '</b></a>' +
+      '<div class="foot__brand"><a class="foot__logo" href="#top">' + '<img class="brand-logo" src="../logos/v1-logo-white.svg" alt="' + attr(s.brandName) + '" width="183" height="48">' + '</a>' +
       (x.about ? '<p>' + t(x.about) + '</p>' : '') + '</div>' +
       '<nav class="foot__col"><h4>Разделы</h4>' + menuLinks(c) + '</nav>' +
       '<div class="foot__col"><h4>Связь</h4>' + (s.phone ? '<a href="' + tel(s.phone) + '">' + esc(s.phone) + '</a>' : '') +

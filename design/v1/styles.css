@@ -823,3 +823,7 @@ a { color: inherit; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; transition-delay: 0ms !important; }
 }
+
+/* ---------- SVG-логотип (design/logos) ---------- */
+.brand-logo { display: block; height: 40px; width: auto; }
+@media (max-width: 767px) { .brand-logo { height: 32px; } }

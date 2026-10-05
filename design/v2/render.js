@@ -176,8 +176,7 @@
   R.header = function (c) {
     var s = c.settings || {}, h = c.hero || {};
     return '<header class="hdr" id="hdr"><div class="wrap hdr-in">' +
-      '<a class="logo" href="#top" aria-label="' + attr(s.brandName) + '"><span class="logo-mark">' + esc(plain(s.brandMark)) + '</span>' +
-      '<span class="logo-txt"><b>' + esc(plain(s.brandName)) + '</b>' + (s.brandTagline ? '<small>' + t(s.brandTagline) + '</small>' : '') + '</span></a>' +
+      '<a class="logo" href="#top" aria-label="' + attr(s.brandName) + '">' + '<img class="brand-logo" src="../logos/v2-logo-white.svg" alt="' + attr(s.brandName) + '" width="183" height="48">' + '</a>' +
       '<nav class="hdr-nav" aria-label="Разделы">' + menuLinks(c) + '</nav>' +
       '<div class="hdr-right">' +
       (s.phone ? '<a class="hdr-phone" href="' + tel(s.phone) + '"><span>' + esc(s.phone) + '</span>' + (s.phoneNote ? '<small>' + t(s.phoneNote) + '</small>' : '') + '</a>' +
@@ -515,7 +514,7 @@
   R.footer = function (c) {
     var x = c.footer || {}, s = c.settings || {};
     return '<footer class="ftr"><div class="wrap"><div class="ftr-grid">' +
-      '<div class="ftr-brand"><a class="logo" href="#top"><span class="logo-mark">' + esc(plain(s.brandMark)) + '</span><span class="logo-txt"><b>' + esc(plain(s.brandName)) + '</b>' + (s.brandTagline ? '<small>' + t(s.brandTagline) + '</small>' : '') + '</span></a>' +
+      '<div class="ftr-brand"><a class="logo" href="#top">' + '<img class="brand-logo" src="../logos/v2-logo-white.svg" alt="' + attr(s.brandName) + '" width="183" height="48">' + '</a>' +
       (x.about ? '<p>' + t(x.about) + '</p>' : '') + '</div>' +
       '<nav class="ftr-nav"><span class="ftr-h">Разделы</span>' + menuLinks(c) + '</nav>' +
       '<div class="ftr-ct">' + (s.phone ? '<a class="ftr-phone" href="' + tel(s.phone) + '">' + esc(s.phone) + '</a>' : '') +

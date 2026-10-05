@@ -824,3 +824,8 @@ a.clist__main:hover { color: var(--accent); }
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; transition-delay: 0ms !important; }
 }
+
+/* ---------- SVG-логотип (design/logos) ---------- */
+.brand-logo { display: block; height: 40px; width: auto; }
+@media (max-width: 767px) { .brand-logo { height: 32px; } }
+.modal__mark--img { display: block; width: 44px; height: 44px; background: none; padding: 0; }
