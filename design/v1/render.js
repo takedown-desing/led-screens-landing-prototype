@@ -35,9 +35,9 @@
     telegram: ['Telegram', '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.9 4.6 18.7 19.5c-.2 1-.9 1.3-1.8.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.4-5 9.1-8.2c.4-.4-.1-.5-.6-.2L6.2 13.2 1.4 11.7c-1-.3-1-1 .2-1.5L20.5 3c.9-.3 1.6.2 1.4 1.6z"/></svg>'],
     max: ['MAX', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V5l8 9 8-9v14"/></svg>']
   };
-  /* Фото для бенто-плиток «Что входит»: в JSON у пунктов нет картинок, берём материалы клиента */
+  /* Видео для бенто-плиток «Что входит»: в JSON у пунктов нет медиа, берём ролики клиента */
   var BENTO_MEDIA = {
-    config: { img: 'assets/img/product-flexible-module-closeup.jpg' },
+    config: { img: 'assets/video/case-showroom-transparent-wall.jpg', video: 'assets/video/case-showroom-transparent-wall.mp4' },
     wrench: { img: 'assets/video/case-pedestrian-bridge-night.jpg', video: 'assets/video/case-pedestrian-bridge-night.mp4' }
   };
 
@@ -59,6 +59,11 @@
     if (!p) return '';
     if (/^(https?:)?\/\//i.test(p) || /^(data|blob):/i.test(p) || p.charAt(0) === '/') return esc(p);
     return esc(ROOT + p.replace(/^\.\//, ''));
+  }
+  /* Медиа: видео с автозапуском (app.js autoVideos), без видео — картинка */
+  function mv(video, poster, alt) {
+    if (video) return '<video muted loop playsinline preload="metadata" data-autoplay' + (poster ? ' poster="' + media(poster) + '"' : '') + ' src="' + media(video) + '"' + (alt ? ' aria-label="' + attr(alt) + '"' : '') + '></video>';
+    return poster ? '<img src="' + media(poster) + '" alt="' + attr(alt || '') + '" loading="lazy">' : '';
   }
   function tel(p) { return 'tel:' + String(p || '').replace(/[^\d+]/g, ''); }
   function svg(name, cls) { return '<svg class="ic' + (cls ? ' ' + cls : '') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICONS[name] || ICONS.doc) + '</svg>'; }
@@ -189,7 +194,7 @@
       var specs = arr(s.specs).filter(vis).map(function (p) { return '<div class="kv"><dt>' + t(p.k) + '</dt><dd>' + t(p.v) + '</dd></div>'; }).join('');
       var rate = Number(s.rate) > 0 ? '<span class="scard__price">от ' + fmt(s.rate) + ' ₽/м²</span>' : '<span class="scard__price scard__price--muted">Расчёт по проекту</span>';
       return '<article class="scard rv">' +
-        '<div class="scard__media">' + (s.image ? '<img src="' + media(s.image) + '" alt="' + attr(s.name) + '" loading="lazy">' : '') + rate + '</div>' +
+        '<div class="scard__media">' + mv(s.video, s.image, s.name) + rate + '</div>' +
         '<div class="scard__body"><h3 class="scard__title">' + t(s.name) + '</h3><p class="scard__desc">' + t(s.desc) + '</p>' +
         (specs ? '<dl class="scard__specs">' + specs + '</dl>' : '') +
         '<div class="scard__actions">' +
@@ -246,7 +251,8 @@
 
     function photoTile(i, cls) {
       var m = BENTO_MEDIA[i.icon] || {};
-      var img = m.img || (i === photoA ? 'assets/img/product-flexible-module-closeup.jpg' : 'assets/video/case-pedestrian-bridge-night.jpg');
+      if (!m.img) m = i === photoA ? BENTO_MEDIA.config : BENTO_MEDIA.wrench;
+      var img = m.img;
       var bg = m.video
         ? '<video class="bento__media" muted loop playsinline preload="none" data-autoplay poster="' + media(img) + '"><source src="' + media(m.video) + '" type="video/mp4"></video>'
         : '<img class="bento__media" src="' + media(img) + '" alt="" loading="lazy">';
@@ -341,7 +347,7 @@
       '<div class="about__main"><div class="sbadge rv"><span class="sbadge__n">' + secN + '</span>' + (x.eyebrow ? '<span class="sbadge__pill">' + t(x.eyebrow) + '</span>' : '') + '</div>' +
       '<h2 class="h2 rv">' + t(x.title) + '</h2><div class="about__text rv">' + paras(x.text) + '</div>' +
       (docs ? '<div class="about__docs">' + docs + '</div>' : '') + '</div>' +
-      (x.image ? '<div class="about__photo rv"><img src="' + media(x.image) + '" alt="' + attr(x.title) + '" loading="lazy"></div>' : '') +
+      (x.video || x.image ? '<div class="about__photo rv">' + mv(x.video, x.image, x.title) + '</div>' : '') +
       '</div>');
   };
 

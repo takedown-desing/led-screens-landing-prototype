@@ -374,6 +374,17 @@
     var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) play(v); else v.pause(); }, { threshold: 0.05 });
     io.observe(v); observers.push(io);
   }
+  /* Видео вне карусели (карточки, плитки, фото-блоки): играют в кадре, на паузе вне кадра */
+  function autoVideos() {
+    var vids = qsa('video[data-autoplay]');
+    vids.forEach(function (v) { v.muted = true; });
+    if (!HAS_IO) { vids.forEach(play); return; }
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (en) { if (en.isIntersecting) play(en.target); else en.target.pause(); });
+    }, { threshold: 0.15 });
+    vids.forEach(function (v) { io.observe(v); });
+    observers.push(io);
+  }
   function onScroll() {
     var y = window.scrollY;
     html.classList.toggle('scrolled', y > 10);
@@ -389,7 +400,7 @@
 
   function init() {
     observers.forEach(function (o) { o.disconnect(); }); observers = [];
-    reveal(); navSpy(); heroVideo(); onScroll();
+    reveal(); navSpy(); heroVideo(); autoVideos(); onScroll();
     var cz = qs('[data-cz]');
     carousel = cz ? Carousel(cz) : null;
     updCalc();

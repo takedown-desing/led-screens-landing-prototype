@@ -307,8 +307,8 @@ a { color: inherit; }
 .tone-white .scard { background: var(--bg-soft); border-color: transparent; }
 .scard:hover { box-shadow: 0 24px 50px -24px rgba(17, 24, 39, .25); }
 .scard__media { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: #ECEDEF; flex: none; }
-.scard__media img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease); }
-.scard:hover .scard__media img { transform: scale(1.04); }
+.scard__media :is(img, video) { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease); }
+.scard:hover .scard__media :is(img, video) { transform: scale(1.04); }
 .scard__price {
   position: absolute; left: 14px; top: 14px; padding: 7px 12px; border-radius: 999px; background: rgba(255, 255, 255, .95);
   font-size: 13px; font-weight: 600; letter-spacing: -.01em; box-shadow: 0 4px 14px rgba(0, 0, 0, .08);
@@ -586,7 +586,7 @@ a { color: inherit; }
 .adoc__ic { width: 36px; height: 36px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; flex: none; }
 .adoc__ic .ic { width: 17px; height: 17px; }
 .about__photo { border-radius: var(--r-lg); overflow: hidden; aspect-ratio: 4 / 3; background: #ddd; }
-.about__photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.about__photo :is(img, video) { display: block; width: 100%; height: 100%; object-fit: cover; }
 @media (min-width: 1024px) { .about__photo { aspect-ratio: 4 / 5; } }
 
 /* ---------- Отзывы ---------- */

@@ -82,6 +82,11 @@
     if (/^(https?:|data:|blob:|\/\/|\/)/i.test(p)) return esc(p);
     return esc(ROOT + p.replace(/^\.\//, ''));
   }
+  /* Медиа: видео с автозапуском (app.js autoVideos), без видео — картинка */
+  function mv(video, poster, alt) {
+    if (video) return '<video muted loop playsinline preload="metadata" data-autoplay' + (poster ? ' poster="' + src(poster) + '"' : '') + ' src="' + src(video) + '"' + (alt ? ' aria-label="' + attr(alt) + '"' : '') + '></video>';
+    return poster ? '<img src="' + src(poster) + '" alt="' + attr(alt || '') + '" loading="lazy">' : '';
+  }
   function tel(p) { return 'tel:' + String(p || '').replace(/[^\d+]/g, ''); }
   function ico(name, cls) {
     return '<svg class="i' + (cls ? ' ' + cls : '') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICONS[name] || ICONS.doc) + '</svg>';
@@ -253,7 +258,7 @@
     var photo = posters[1] || posters[0];
     var tiles = items.map(function (i, n) {
       var tile = '<div class="stat"><b>' + t(i.value) + '</b><span>' + t(i.label) + '</span></div>';
-      if (n === 1 && photo) tile += '<div class="stat-photo"><img src="' + src(photo.poster) + '" alt="' + attr(photo.title) + '" loading="lazy"><span class="stat-chip">' + t(photo.type || photo.title) + '</span></div>';
+      if (n === 1 && photo) tile += '<div class="stat-photo">' + mv(photo.video, photo.poster, photo.title) + '<span class="stat-chip">' + t(photo.type || photo.title) + '</span></div>';
       return tile;
     }).join('');
     var facts = arr(h.facts).map(function (f) {
@@ -278,7 +283,7 @@
       var ex = casesOn && s.caseFilter && used[s.caseFilter]
         ? '<a class="btn btn-line btn-sm" href="#cases" data-case-filter="' + esc(s.caseFilter) + '"><span>Примеры</span></a>' : '';
       return '<article class="prod rv"><div class="prod-img">' +
-        (s.image ? '<img src="' + src(s.image) + '" alt="' + attr(s.name) + '" loading="lazy">' : '') +
+        mv(s.video, s.image, s.name) +
         (s.px ? '<span class="prod-chip">' + t(s.px) + '</span>' : '') + '</div>' +
         '<div class="prod-body"><h3>' + t(s.name) + '</h3><p class="prod-desc">' + t(s.desc) + '</p>' +
         (specs ? '<ul class="prod-specs">' + specs + '</ul>' : '') +
@@ -343,8 +348,8 @@
         (num ? '<div class="guar-num"><b>' + esc(parts[1]) + '</b><span>' + esc(parts[2]) + '</span></div>' : '') +
         '<h3>' + t(g.title) + '</h3><p>' + t(g.text) + '</p></div>';
     }
-    var img = arr(c.screens && c.screens.items).filter(function (s) { return vis(s) && s.image; })[0];
-    var photo = img ? '<div class="inc-photo rv"><img src="' + src(img.image) + '" alt="' + attr(img.name) + '" loading="lazy">' +
+    var img = arr(c.screens && c.screens.items).filter(function (s) { return vis(s) && (s.video || s.image); })[0];
+    var photo = img ? '<div class="inc-photo rv">' + mv(img.video, img.image, img.name) +
       (x.sub ? '<div class="inc-photo-cap">' + (x.eyebrow ? '<span>' + t(x.eyebrow) + '</span>' : '') + '<p>' + t(x.sub) + '</p></div>' : '') + '</div>' : '';
     var list = small.length ? '<div class="inc-list rv">' + small.map(function (i) {
       return '<div class="inc-li"><span class="inc-ico s">' + ico(i.icon) + '</span><div><h4>' + t(i.title) + '</h4><p>' + t(i.text) + '</p></div></div>';
@@ -379,7 +384,7 @@
     }).join('');
     var rates = types.map(function (s) {
       return '<button type="button" class="rate rv" data-pick-type="' + esc(s.id) + '">' +
-        (s.image ? '<span class="rate-img"><img src="' + src(s.image) + '" alt="" loading="lazy"></span>' : '') +
+        (s.video || s.image ? '<span class="rate-img">' + mv(s.video, s.image, '') + '</span>' : '') +
         '<span class="rate-body"><span class="rate-name">' + t(s.name) + '</span>' +
         '<span class="rate-price">Стоимость от <em>' + fmt(s.rate) + '</em> ₽ за м²</span>' +
         (s.px ? '<span class="rate-px">Шаг ' + t(s.px) + '</span>' : '') + '</span></button>';
@@ -425,7 +430,7 @@
     var x = c.about || {}, tr = arr(c.trust && c.trust.items)[0];
     var docs = arr(x.docs).map(function (d) { return '<li><span class="inc-ico s">' + ico(d.icon) + '</span><span>' + t(d.text) + '</span></li>'; }).join('');
     return sec('about', '<div class="wrap about-grid">' +
-      (x.image ? '<div class="about-photo rv"><img src="' + src(x.image) + '" alt="' + attr(x.title) + '" loading="lazy">' +
+      (x.video || x.image ? '<div class="about-photo rv">' + mv(x.video, x.image, x.title) +
         (tr ? '<div class="about-stat"><b>' + t(tr.value) + '</b><span>' + t(tr.label) + '</span></div>' : '') + '</div>' : '') +
       '<div class="about-txt rv">' + (x.eyebrow ? '<span class="eyebrow">' + t(x.eyebrow) + '</span>' : '') +
       '<h2>' + acc('about', x.title) + '</h2><div class="about-p">' + paras(x.text) + '</div>' +

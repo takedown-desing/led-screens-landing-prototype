@@ -155,5 +155,21 @@
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  window.LandingApp = { afterRender: function () { updCalc(); observeNav(); } };
+  // Видео в карточках и блоках: играют в кадре, на паузе вне кадра
+  var vio = null;
+  function autoVideos() {
+    if (vio) vio.disconnect();
+    var vids = qsa('video[data-autoplay]');
+    vids.forEach(function (v) {
+      v.muted = true;
+      var m = v.closest('.case .media');
+      if (m) { v.addEventListener('play', function () { m.classList.add('playing'); }); v.addEventListener('pause', function () { m.classList.remove('playing'); }); }
+    });
+    if (!('IntersectionObserver' in window)) { vids.forEach(function (v) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }); return; }
+    vio = new IntersectionObserver(function (es) {
+      es.forEach(function (en) { if (en.isIntersecting) { var p = en.target.play(); if (p && p.catch) p.catch(function () {}); } else en.target.pause(); });
+    }, { threshold: 0.15 });
+    vids.forEach(function (v) { vio.observe(v); });
+  }
+  window.LandingApp = { afterRender: function () { updCalc(); observeNav(); autoVideos(); } };
 })();

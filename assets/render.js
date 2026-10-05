@@ -66,6 +66,10 @@
     return String(s || '').split(/\n\s*\n/).map(function (p) { p = p.trim(); return p ? '<p>' + t(p) + '</p>' : ''; }).join('');
   }
   function src(p) { return esc(mediaMap[p] || p || ''); }
+  function mv(video, poster, alt) {
+    if (video) return '<video muted loop playsinline preload="metadata" data-autoplay' + (poster ? ' poster="' + src(poster) + '"' : '') + ' src="' + src(video) + '"' + (alt ? ' aria-label="' + attr(alt) + '"' : '') + '></video>';
+    return poster ? '<img src="' + src(poster) + '" alt="' + attr(alt || '') + '" loading="lazy">' : '';
+  }
   function tel(p) { return 'tel:' + String(p || '').replace(/[^\d+]/g, ''); }
   function svg(name) { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' + (ICONS[name] || ICONS.doc) + '</svg>'; }
   function tag(id) { var l = LABELS[id]; return l ? ' data-tag="' + l[0] + '" data-label="' + esc(l[1]) + '"' : ''; }
@@ -165,7 +169,7 @@
     var x = c.screens, cases = isOn(c, 'cases');
     var cards = arr(x.items).filter(vis).map(function (s) {
       var specs = arr(s.specs).map(function (p) { return '<li><span>' + t(p.k) + '</span><b>' + t(p.v) + '</b></li>'; }).join('');
-      return '<article class="prod"><div class="media">' + (s.image ? '<img src="' + src(s.image) + '" alt="' + attr(s.name) + '" loading="lazy">' : '') +
+      return '<article class="prod"><div class="media">' + mv(s.video, s.image, s.name) +
         (s.chip ? '<span class="chip">' + t(s.chip) + '</span>' : '') + '</div>' +
         '<div class="body"><h3>' + t(s.name) + '</h3><p>' + t(s.desc) + '</p>' + (specs ? '<ul class="specs">' + specs + '</ul>' : '') +
         '<div class="actions">' + ask('btn btn-primary btn-sm', 'Рассчитать', 'Расчёт: ' + plain(s.name), 'Укажите размеры и место установки, пришлём конфигурацию и смету', s.name, s.id) +
@@ -187,7 +191,7 @@
     var cards = items.map(function (i) {
       var facts = arr(i.facts).map(function (f) { return '<span>' + t(f.k) + ' <b>' + t(f.v) + '</b></span>'; }).join('');
       var media = i.video
-        ? '<video preload="metadata" playsinline' + (i.poster ? ' poster="' + src(i.poster) + '"' : '') + '><source src="' + src(i.video) + '" type="video/mp4"></video>' +
+        ? '<video preload="metadata" muted loop playsinline data-autoplay' + (i.poster ? ' poster="' + src(i.poster) + '"' : '') + '><source src="' + src(i.video) + '" type="video/mp4"></video>' +
           '<span class="play"><i><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></i></span><span class="dur"></span>'
         : (i.poster ? '<img src="' + src(i.poster) + '" alt="' + attr(i.title) + '" loading="lazy">' : '');
       return '<article class="case" data-type="' + esc(arr(i.filters).join(' ')) + '"><div class="media">' + media + '</div>' +
@@ -263,7 +267,7 @@
       (x.eyebrow ? '<span class="eyebrow">' + t(x.eyebrow) + '</span>' : '') +
       '<h2 data-cms="Заголовок">' + t(x.title) + '</h2><div data-cms="Текст о компании">' + paras(x.text) + '</div>' +
       (docs ? '<div class="docs" data-cms="Документы и факты">' + docs + '</div>' : '') + '</div>' +
-      (x.image ? '<div class="photo" data-cms="Фото"><img src="' + src(x.image) + '" alt="' + attr(x.title) + '" loading="lazy"></div>' : '') +
+      (x.video || x.image ? '<div class="photo" data-cms="Видео">' + mv(x.video, x.image, x.title) + '</div>' : '') +
       '</div></div></section>';
   };
 
