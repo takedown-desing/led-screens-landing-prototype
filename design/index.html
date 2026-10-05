@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Варианты дизайна: LED-экраны, Москва и МО</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#0B1220; --muted:#5B6577; --line:#E3E7EE; --bg:#F4F6FA; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:Manrope,system-ui,sans-serif; color:var(--ink); background:var(--bg); -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:1180px; margin:0 auto; padding:56px 24px 80px; }
+  .top { display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; margin-bottom:40px; }
+  .eyebrow { font-size:13px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+  h1 { font-size:clamp(32px,5vw,52px); line-height:1.05; letter-spacing:-.03em; margin:10px 0 12px; font-weight:700; }
+  .lead { color:var(--muted); font-size:17px; line-height:1.6; max-width:640px; margin:0; }
+  .links a { color:var(--ink); font-weight:600; font-size:14px; margin-left:18px; }
+  .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:24px; padding:10px; display:flex; flex-direction:column; text-decoration:none; color:inherit; transition:transform .3s, box-shadow .3s; }
+  a.card:hover { transform:translateY(-4px); box-shadow:0 20px 50px rgba(11,18,32,.10); }
+  .swatch { aspect-ratio:4/3; border-radius:18px; position:relative; overflow:hidden; display:flex; align-items:flex-end; padding:18px; }
+  .swatch b { font-size:56px; letter-spacing:-.04em; line-height:1; }
+  .v1 { background:radial-gradient(120% 90% at 85% 15%, #ff8a3d 0, rgba(255,138,61,0) 55%), #EFEFEF; color:#111827; }
+  .v2 { background:#000; color:#fff; }
+  .v2::after { content:"ЯРКО"; position:absolute; right:18px; top:16px; color:#FF5900; font-weight:800; font-size:28px; }
+  .v3 { background:radial-gradient(90% 80% at 80% 20%, rgba(34,211,238,.55), transparent 60%), radial-gradient(90% 80% at 20% 90%, rgba(255,61,154,.35), transparent 60%), #fff; color:#2F5BFF; border:1px dashed #C9D2E3; }
+  .body { padding:18px 10px 10px; display:flex; flex-direction:column; flex:1; }
+  .body h2 { font-size:22px; margin:0 0 8px; letter-spacing:-.02em; }
+  .body p { color:var(--muted); font-size:14.5px; line-height:1.55; margin:0 0 16px; }
+  .meta { margin-top:auto; display:flex; gap:8px; flex-wrap:wrap; }
+  .pill { font-size:12px; font-weight:600; background:var(--bg); border-radius:999px; padding:6px 12px; }
+  .pill.wait { background:#FFF4E5; color:#92400E; }
+  .note { margin-top:40px; background:#fff; border:1px solid var(--line); border-radius:24px; padding:28px; }
+  .note h3 { margin:0 0 12px; font-size:18px; }
+  .note ul { margin:0; padding-left:20px; color:var(--muted); line-height:1.7; font-size:15px; }
+  @media (max-width:900px) { .grid { grid-template-columns:1fr; } .links a { margin:0 18px 0 0; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div>
+      <div class="eyebrow">Этап 2 · Дизайн</div>
+      <h1>Варианты дизайна лендинга</h1>
+      <p class="lead">Три направления на одном и том же контенте. Тексты, цифры, фото и видео берутся из админки, поэтому любой вариант можно править так же, как прототип.</p>
+    </div>
+    <div class="links"><a href="../landing.html">Прототип</a><a href="../admin/">Админка</a><a href="../">Обзор</a></div>
+  </div>
+
+  <div class="grid">
+    <a class="card" href="v1/">
+      <div class="swatch v1"><b>01</b></div>
+      <div class="body">
+        <h2>Светлый</h2>
+        <p>Светло-серый фон с живым оранжевым свечением, белая плавающая шапка, крупная спокойная типографика. Тёмные секции только там, где светятся экраны.</p>
+        <div class="meta"><span class="pill">Референс: студийный сайт</span><span class="pill">Акцент #F26522</span></div>
+      </div>
+    </a>
+    <a class="card" href="v2/">
+      <div class="swatch v2"><b>02</b></div>
+      <div class="body">
+        <h2>Контраст</h2>
+        <p>Чёрные и белые секции, ключевые слова заголовков заглавными оранжевыми, бегущая строка, вращающийся бейдж. Громко и по-рекламному.</p>
+        <div class="meta"><span class="pill">Референс: сайт конкурента</span><span class="pill">Акцент #FF5900</span></div>
+      </div>
+    </a>
+    <div class="card" id="v3">
+      <div class="swatch v3"><b>03</b></div>
+      <div class="body">
+        <h2>Pixel Daylight</h2>
+        <p>Белый и холодный серый, электрический синий акцент, LED-свечение cyan-magenta за видео. Собирается в Google Stitch по DESIGN.md.</p>
+        <div class="meta"><span class="pill wait">Готовится в Google Stitch</span><span class="pill">Акцент #2F5BFF</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">
+    <h3>Что учтено из видео клиента во всех вариантах</h3>
+    <ul>
+      <li>Страница не тёмная: светлые секции чередуются с тёмными, светлых больше.</li>
+      <li>На первом экране сразу виден работающий экран. Форма расчёта открывается по кнопке.</li>
+      <li>Карточки типов экранов одной высоты, картинки одного размера, без «лесенки».</li>
+      <li>Объекты в карусели: одна большая плитка и две маленькие, видео играют сами, автопрокрутка, призыв заказать такой же экран.</li>
+      <li>«Что входит» подано визуально, жёлтых пометок нет.</li>
+    </ul>
+  </div>
+</div>
+</body>
+</html>
