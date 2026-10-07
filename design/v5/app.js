@@ -250,13 +250,39 @@
   }
 
   /* ---------- Видео глав и остальные: в кадре играет, вне кадра пауза ---------- */
+  /* Запуск надёжнее, чем один вызов play():
+     - за экран до появления главе ставится autoplay и preload=auto: браузер сам догружает и стартует ролик без звука
+       (в разметке autoplay нет, иначе все ролики качались бы сразу при загрузке страницы);
+     - если play() отклонён или ролик ещё грузился, повторяем на canplay и при первом касании или прокрутке */
+  var shown = new Set();
+  function kick() { shown.forEach(function (v) { if (v.paused) play(v); }); }
   function autoVideos() {
     var vids = qsa('video[data-autoplay]');
     if (!('IntersectionObserver' in window)) { vids.forEach(play); return; }
     var io = new IntersectionObserver(function (es) {
-      es.forEach(function (en) { if (en.isIntersecting) play(en.target); else en.target.pause(); });
-    }, { threshold: 0.25 });
-    vids.forEach(function (v) { v.muted = true; io.observe(v); });
+      es.forEach(function (en) {
+        var v = en.target;
+        if (en.isIntersecting) { shown.add(v); play(v); } else { shown.delete(v); v.pause(); }
+      });
+    }, { threshold: 0.2 });
+    var ahead = new IntersectionObserver(function (es) {
+      es.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        var v = en.target;
+        v.autoplay = true;
+        if (v.preload !== 'auto') { v.preload = 'auto'; if (v.readyState < 2) v.load(); }
+        ahead.unobserve(v);
+      });
+    }, { rootMargin: '100% 0px 100% 0px' });
+    vids.forEach(function (v) {
+      v.muted = true;
+      io.observe(v); ahead.observe(v);
+      ['canplay', 'loadeddata'].forEach(function (ev) { v.addEventListener(ev, function () { if (shown.has(v) && v.paused) play(v); }); });
+    });
+    ['pointerdown', 'touchstart', 'keydown'].forEach(function (ev) { d.addEventListener(ev, kick, { passive: true }); });
+    var kt = 0;
+    addEventListener('scroll', function () { clearTimeout(kt); kt = setTimeout(kick, 200); }, { passive: true });
+    d.addEventListener('visibilitychange', function () { if (!d.hidden) kick(); });
     /* Вертикальные ролики показываем целиком на размытой подложке, справа от текста.
        Кнопку звука прячем, если в ролике нет звуковой дорожки (проверка через полторы секунды после старта) */
     qsa('.ch').forEach(function (ch) {

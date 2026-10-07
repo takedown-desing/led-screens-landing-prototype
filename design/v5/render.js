@@ -133,7 +133,7 @@
     var title = h.titleShort || h.h1;
     var trust = arr(c.trust && c.trust.items).filter(vis).map(function (i) { var v = plain(i.value).trim(); return '<li><b data-wheel="' + esc(v) + '">' + esc(v) + '</b> ' + soft(i.label) + '</li>'; }).join('');
     return '<section class="open" id="top" data-open data-tone="dark" aria-label="Витрина включается"><div class="open__stage">' +
-      (video ? '<video class="open__video" muted loop playsinline preload="auto"' + (poster ? ' poster="' + media(poster) + '"' : '') + ' src="' + media(video) + '"></video>' : '') +
+      (video ? '<video class="open__video" autoplay muted loop playsinline preload="auto"' + (poster ? ' poster="' + media(poster) + '"' : '') + ' src="' + media(video) + '"></video>' : '') +
       '<div class="open__off" aria-hidden="true"' + (poster ? ' style="background-image:url(' + media(poster) + ')"' : '') + '></div>' +
       '<div class="open__rows" aria-hidden="true"></div><div class="open__glow" aria-hidden="true"></div>' +
       '<div class="open__shade" aria-hidden="true"></div>' +
