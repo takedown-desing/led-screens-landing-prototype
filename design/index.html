@@ -18,8 +18,8 @@
   h1 { font-size:clamp(32px,5vw,52px); line-height:1.05; letter-spacing:-.03em; margin:10px 0 12px; font-weight:700; }
   .lead { color:var(--muted); font-size:17px; line-height:1.6; max-width:640px; margin:0; }
   .links a { color:var(--ink); font-weight:600; font-size:14px; margin-left:18px; }
-  .grid { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
-  @media (max-width:1180px) { .grid { grid-template-columns:repeat(2,1fr); } }
+  .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  @media (max-width:1000px) { .grid { grid-template-columns:repeat(2,1fr); } }
   .card { background:#fff; border:1px solid var(--line); border-radius:24px; padding:10px; display:flex; flex-direction:column; text-decoration:none; color:inherit; transition:transform .3s, box-shadow .3s; }
   a.card:hover { transform:translateY(-4px); box-shadow:0 20px 50px rgba(11,18,32,.10); }
   .swatch { aspect-ratio:4/3; border-radius:18px; position:relative; overflow:hidden; display:flex; align-items:flex-end; padding:18px; }
@@ -31,6 +31,9 @@
   .v4 { background:radial-gradient(70% 45% at 50% 0%, rgba(48,84,255,.45), transparent 70%), #020408; color:#fff; }
   .v4::after { content:""; position:absolute; left:16%; right:16%; top:24%; height:38%; background:linear-gradient(120deg,#163a8a,#1fb6c9 55%,#0b1a3a); box-shadow:0 0 0 2px #01050b, 0 18px 40px rgba(48,84,255,.35); }
   .v4 b { position:relative; z-index:1; }
+  .v5 { background:linear-gradient(180deg, #1a1a1a 0 46%, #0b3d2a 46% 52%, #f6f4ee 52%); color:#fff; }
+  .v5::before { content:""; position:absolute; left:0; right:0; top:46%; height:6%; background:#19c37d; box-shadow:0 0 18px 4px rgba(25,195,125,.6); }
+  .v5 b { position:relative; z-index:1; color:#141414; }
   .body { padding:18px 10px 10px; display:flex; flex-direction:column; flex:1; }
   .body h2 { font-size:22px; margin:0 0 8px; letter-spacing:-.02em; }
   .body p { color:var(--muted); font-size:14.5px; line-height:1.55; margin:0 0 16px; }
@@ -49,7 +52,7 @@
     <div>
       <div class="eyebrow">Этап 2 · Дизайн</div>
       <h1>Варианты дизайна лендинга</h1>
-      <p class="lead">Четыре направления на одном и том же контенте. Тексты, цифры, фото и видео берутся из админки, поэтому любой вариант можно править так же, как прототип.</p>
+      <p class="lead">Пять направлений на одном и том же контенте. Тексты, цифры, фото и видео берутся из админки, поэтому любой вариант можно править так же, как прототип.</p>
     </div>
     <div class="links"><a href="logos/">Логотипы</a><a href="../landing.html">Прототип</a><a href="../admin/">Админка</a><a href="../">Обзор</a></div>
   </div>
@@ -85,6 +88,14 @@
         <h2>Сцена</h2>
         <p>Видео первого экрана при прокрутке встаёт LED-панелью на стену 3D-зала. Дальше светлая страница на линиях, без иконок и плашек, объекты и калькулятор как тёмные экраны.</p>
         <div class="meta"><span class="pill">По макету дизайнера</span><span class="pill" style="color:#3054ff;background:#EEF1FF">Акцент #3054FF</span></div>
+      </div>
+    </a>
+    <a class="card" id="v5" href="v5/">
+      <div class="swatch v5"><b>05</b></div>
+      <div class="body">
+        <h2>Истории</h2>
+        <p>Стеклянная витрина на первом экране включается при прокрутке. Дальше страница как рассказ: главы по реальным объектам, письмо от менеджера, разговорные ответы. Без иконок, карточек и таблиц, тексты переписаны.</p>
+        <div class="meta"><span class="pill">По замечанию Макса</span><span class="pill" style="color:#19c37d;background:#E9F9F1">Бумага, чёрный, зелёный «вкл»</span></div>
       </div>
     </a>
   </div>

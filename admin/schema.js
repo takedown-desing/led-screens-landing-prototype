@@ -74,7 +74,11 @@
       fields: [
         { k: 'hero.badge', type: 'text', label: 'Строка региона над заголовком' },
         { k: 'hero.h1', type: 'textarea', rows: 2, label: 'Главный заголовок (H1)' },
-        { k: 'hero.titleShort', type: 'text', label: 'Короткий заголовок на видео (вариант дизайна 4)', hint: 'Крупный заголовок первого экрана в варианте 4. Пустое поле: выводится главный заголовок' },
+        { k: 'hero.titleShort', type: 'text', label: 'Короткий заголовок на видео (варианты дизайна 4 и 5)', hint: 'Крупный заголовок первого экрана в вариантах 4 и 5. Пустое поле: выводится главный заголовок' },
+        { type: 'group', label: 'Витрина включается (вариант дизайна 5)', fields: [
+          { k: 'hero.sceneOff', type: 'text', label: 'Подпись, пока экран выключен' },
+          { k: 'hero.sceneOn', type: 'text', label: 'Подпись, когда экран включился' }
+        ] },
         { k: 'hero.lead', type: 'textarea', rows: 4, label: 'Подзаголовок' },
         { k: 'hero.video', type: 'media', kind: 'video', label: 'Фоновое видео', poster: 'hero.poster', hint: 'MP4 без звука, лучше до 10 МБ. Если видео нет, фоном станет картинка ниже' },
         { k: 'hero.poster', type: 'media', kind: 'image', label: 'Картинка фона', hint: 'Показывается, пока грузится видео, и вместо него' },
@@ -146,6 +150,7 @@
             { k: 'type', type: 'text', label: 'Тип объекта', hint: 'Мелкая строка над названием' },
             { k: 'title', type: 'text', label: 'Название' },
             { k: 'desc', type: 'textarea', rows: 3, label: 'Описание' },
+            { k: 'story', type: 'textarea', rows: 3, label: 'Рассказ об объекте (вариант дизайна 5)', hint: 'Два-три живых предложения вместо описания. Пустое поле: выводится описание' },
             { k: 'video', type: 'media', kind: 'video', label: 'Видео', poster: 'poster', hint: 'MP4, лучше до 10 МБ. Превью создастся из кадра автоматически' },
             { k: 'poster', type: 'media', kind: 'image', label: 'Превью', hint: 'Картинка до запуска видео. Без видео объект показывается с этой картинкой' },
             { k: 'filters', type: 'multicheck', label: 'Фильтры', options: function (c) { return (c.cases.filters || []).map(function (f) { return [f.id, plain(f.label)]; }); } },
@@ -168,6 +173,7 @@
     {
       id: 'process', title: 'Как работаем', scroll: 'process', group: 'Блоки',
       fields: head('process').concat([
+        { k: 'process.letter', type: 'textarea', rows: 10, label: 'Письмо от менеджера (вариант дизайна 5)', hint: 'От первого лица, пустая строка начинает новый абзац. Подпись берётся из контактов. Пустое поле: выводятся этапы ниже' },
         { k: 'process.items', type: 'list', label: 'Этапы', addLabel: 'Добавить этап', hint: 'Номера проставляются сами по порядку',
           title: function (i) { return i.title; }, make: function () { return { title: 'Новый этап', text: '', term: '' }; },
           item: [
@@ -261,6 +267,7 @@
           item: [
             { k: 'q', type: 'text', label: 'Вопрос' },
             { k: 'a', type: 'textarea', rows: 4, label: 'Ответ', hint: 'Пустая строка начинает новый абзац' },
+            { k: 'talk', type: 'textarea', rows: 4, label: 'Ответ разговорный (вариант дизайна 5)', hint: 'Пустое поле: выводится обычный ответ' },
             { k: 'open', type: 'checkbox', label: 'Раскрыт при загрузке страницы' }
           ] }
       ]
