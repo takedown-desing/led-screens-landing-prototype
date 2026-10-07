@@ -18,7 +18,8 @@
   h1 { font-size:clamp(32px,5vw,52px); line-height:1.05; letter-spacing:-.03em; margin:10px 0 12px; font-weight:700; }
   .lead { color:var(--muted); font-size:17px; line-height:1.6; max-width:640px; margin:0; }
   .links a { color:var(--ink); font-weight:600; font-size:14px; margin-left:18px; }
-  .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .grid { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+  @media (max-width:1180px) { .grid { grid-template-columns:repeat(2,1fr); } }
   .card { background:#fff; border:1px solid var(--line); border-radius:24px; padding:10px; display:flex; flex-direction:column; text-decoration:none; color:inherit; transition:transform .3s, box-shadow .3s; }
   a.card:hover { transform:translateY(-4px); box-shadow:0 20px 50px rgba(11,18,32,.10); }
   .swatch { aspect-ratio:4/3; border-radius:18px; position:relative; overflow:hidden; display:flex; align-items:flex-end; padding:18px; }
@@ -27,6 +28,9 @@
   .v2 { background:#000; color:#fff; }
   .v2::after { content:"ЯРКО"; position:absolute; right:18px; top:16px; color:#FF5900; font-weight:800; font-size:28px; }
   .v3 { background:radial-gradient(90% 80% at 80% 20%, rgba(34,211,238,.55), transparent 60%), radial-gradient(90% 80% at 20% 90%, rgba(255,61,154,.35), transparent 60%), #fff; color:#0066FF; }
+  .v4 { background:radial-gradient(70% 45% at 50% 0%, rgba(48,84,255,.45), transparent 70%), #020408; color:#fff; }
+  .v4::after { content:""; position:absolute; left:16%; right:16%; top:24%; height:38%; background:linear-gradient(120deg,#163a8a,#1fb6c9 55%,#0b1a3a); box-shadow:0 0 0 2px #01050b, 0 18px 40px rgba(48,84,255,.35); }
+  .v4 b { position:relative; z-index:1; }
   .body { padding:18px 10px 10px; display:flex; flex-direction:column; flex:1; }
   .body h2 { font-size:22px; margin:0 0 8px; letter-spacing:-.02em; }
   .body p { color:var(--muted); font-size:14.5px; line-height:1.55; margin:0 0 16px; }
@@ -45,7 +49,7 @@
     <div>
       <div class="eyebrow">Этап 2 · Дизайн</div>
       <h1>Варианты дизайна лендинга</h1>
-      <p class="lead">Три направления на одном и том же контенте. Тексты, цифры, фото и видео берутся из админки, поэтому любой вариант можно править так же, как прототип.</p>
+      <p class="lead">Четыре направления на одном и том же контенте. Тексты, цифры, фото и видео берутся из админки, поэтому любой вариант можно править так же, как прототип.</p>
     </div>
     <div class="links"><a href="logos/">Логотипы</a><a href="../landing.html">Прототип</a><a href="../admin/">Админка</a><a href="../">Обзор</a></div>
   </div>
@@ -73,6 +77,14 @@
         <h2>Stitch</h2>
         <p>Белый и холодный серый, электрический синий акцент, LED-свечение cyan-magenta за видео. Собран по макету Google Stitch (DESIGN.md), везде играют видео объектов.</p>
         <div class="meta"><span class="pill">По макету Google Stitch</span><span class="pill" style="color:#0066FF;background:#EEF6FF">Акцент #0066FF</span></div>
+      </div>
+    </a>
+    <a class="card" id="v4" href="v4/">
+      <div class="swatch v4"><b>04</b></div>
+      <div class="body">
+        <h2>Сцена</h2>
+        <p>Видео первого экрана при прокрутке встаёт LED-панелью на стену 3D-зала. Дальше светлая страница на линиях, без иконок и плашек, объекты и калькулятор как тёмные экраны.</p>
+        <div class="meta"><span class="pill">По макету дизайнера</span><span class="pill" style="color:#3054ff;background:#EEF1FF">Акцент #3054FF</span></div>
       </div>
     </a>
   </div>

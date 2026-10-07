@@ -74,6 +74,7 @@
       fields: [
         { k: 'hero.badge', type: 'text', label: 'Строка региона над заголовком' },
         { k: 'hero.h1', type: 'textarea', rows: 2, label: 'Главный заголовок (H1)' },
+        { k: 'hero.titleShort', type: 'text', label: 'Короткий заголовок на видео (вариант дизайна 4)', hint: 'Крупный заголовок первого экрана в варианте 4. Пустое поле: выводится главный заголовок' },
         { k: 'hero.lead', type: 'textarea', rows: 4, label: 'Подзаголовок' },
         { k: 'hero.video', type: 'media', kind: 'video', label: 'Фоновое видео', poster: 'hero.poster', hint: 'MP4 без звука, лучше до 10 МБ. Если видео нет, фоном станет картинка ниже' },
         { k: 'hero.poster', type: 'media', kind: 'image', label: 'Картинка фона', hint: 'Показывается, пока грузится видео, и вместо него' },
