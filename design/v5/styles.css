@@ -32,6 +32,7 @@ ol, ul { margin: 0; padding: 0; list-style: none; }
 ::selection { background: var(--blue); color: #fff; }
 :focus-visible { outline: 2px solid var(--blue); outline-offset: 4px; }
 .wrap { width: min(100% - var(--gut) * 2, 1440px); margin-inline: auto; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* ---------- Типографика ---------- */
 .h2 { font-size: clamp(32px, 4vw, 60px); font-weight: 500; line-height: 1.06; letter-spacing: -.03em; text-wrap: balance; }
@@ -144,14 +145,26 @@ ol, ul { margin: 0; padding: 0; list-style: none; }
 /* Строка цифр под первым экраном */
 .proof { background: var(--night); color: var(--on-dark); }
 .proof__list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 28px; padding: 36px 0; border-top: 1px solid var(--line-d); font-size: 15px; line-height: 1.4; }
-.proof__list b { display: block; margin-bottom: 2px; font-size: 22px; font-weight: 500; letter-spacing: -.02em; color: #fff; }
-@media (min-width: 900px) { .proof__list { grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 44px 0; } .proof__list b { display: inline; margin-right: 8px; font-size: 26px; } }
+.proof__list b { position: relative; display: block; margin-bottom: 6px; font-size: clamp(34px, 9vw, 44px); font-weight: 500; line-height: 1.1; letter-spacing: -.03em; color: #fff; }
+@media (min-width: 900px) { .proof__list { grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 56px 0; } .proof__list b { font-size: clamp(44px, 4.4vw, 72px); } }
+/* Барабаны цифр */
+.wh { display: inline-flex; align-items: baseline; vertical-align: baseline; font-variant-numeric: tabular-nums; }
+.wh__w { display: inline-flex; width: calc(1ch - .02em); height: 1.25em; overflow: hidden; line-height: 1.25; flex-shrink: 0; vertical-align: baseline; }
+.wh__s { display: flex; flex-direction: column; width: 100%; flex-shrink: 0; transform: translateY(0); transition: transform 1.6s var(--ease); transition-delay: var(--delay, 0s); }
+.wh__s > span { display: block; height: 1.25em; line-height: 1.25em; text-align: center; flex-shrink: 0; }
+.is-seen .wh__s { transform: translateY(calc(var(--to) * -1.25em)); }
+.wh__affix { font-size: .72em; }
+.wh__affix--pre { margin-right: .18em; }
+.wh__affix--post { margin-left: .14em; }
+.wh__sp { width: .25em; flex-shrink: 0; }
 
 /* ---------- Главы ---------- */
 .ch { position: relative; min-height: 100svh; display: flex; align-items: flex-end; isolation: isolate; background: var(--night); color: #fff; overflow: clip; }
 .ch__bd, .ch__v { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
 .ch__bd { z-index: -3; filter: blur(30px) brightness(.5); transform: scale(1.1); }
 .ch.is-portrait .ch__v { object-fit: contain; }
+/* Вертикальный ролик на широком экране стоит справа, текст слева его не перекрывает */
+@media (min-width: 1024px) { .ch.is-portrait .ch__v { object-position: 92% center; } .ch.is-portrait .ch__shade { background: linear-gradient(90deg, rgba(0, 0, 0, .55), rgba(0, 0, 0, .25) 45%, transparent 60%), linear-gradient(180deg, transparent 60%, rgba(0, 0, 0, .55)); } }
 .ch__shade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(0, 0, 0, .25), transparent 28%, transparent 40%, rgba(0, 0, 0, .55) 62%, rgba(0, 0, 0, .86) 100%); }
 .ch__in { position: relative; padding: calc(var(--hdr) + 40px) 0 clamp(40px, 6vh, 72px); }
 .ch__n { margin-bottom: 14px; font-size: 13px; letter-spacing: .04em; color: rgba(255, 255, 255, .75); font-variant-numeric: tabular-nums; }
@@ -368,4 +381,4 @@ ol, ul { margin: 0; padding: 0; list-style: none; }
 /* Появление */
 .rv-on .rv { opacity: 0; transform: translateY(22px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
 .rv-on .rv.in { opacity: 1; transform: none; }
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } .wh__s { transform: translateY(calc(var(--to) * -1.25em)); } }

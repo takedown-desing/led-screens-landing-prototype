@@ -161,11 +161,14 @@
     }
     if ((el = t.closest('.faq__q'))) { toggleFaq(el); return; }
     if ((el = t.closest('[data-sound]'))) {
-      /* звук главы: включает звук у видео главы и показывает элементы управления */
+      /* звук главы: включается только у одной главы, остальные снова без звука */
       var v = qs('video', el.closest('.ch')); if (!v) return;
-      v.muted = !v.muted; el.setAttribute('aria-pressed', String(!v.muted));
-      el.textContent = v.muted ? 'Включить звук' : 'Выключить звук';
-      if (!v.muted) play(v);
+      var on = v.muted;
+      qsa('.ch video').forEach(function (o) { if (o !== v) { o.muted = true; var b = qs('[data-sound]', o.closest('.ch')); if (b) { b.setAttribute('aria-pressed', 'false'); b.textContent = 'Включить звук'; } } });
+      v.muted = !on; v.volume = 1;
+      el.setAttribute('aria-pressed', String(on));
+      el.textContent = on ? 'Выключить звук' : 'Включить звук';
+      if (on) play(v);
       return;
     }
   });
@@ -254,17 +257,60 @@
       es.forEach(function (en) { if (en.isIntersecting) play(en.target); else en.target.pause(); });
     }, { threshold: 0.25 });
     vids.forEach(function (v) { v.muted = true; io.observe(v); });
-    /* Вертикальные ролики показываем целиком на размытой подложке */
+    /* Вертикальные ролики показываем целиком на размытой подложке, справа от текста.
+       Кнопку звука прячем, если в ролике нет звуковой дорожки (проверка через полторы секунды после старта) */
     qsa('.ch').forEach(function (ch) {
-      var v = qs('video', ch);
-      if (v) v.addEventListener('loadedmetadata', function () { if (v.videoHeight > v.videoWidth * 1.05) ch.classList.add('is-portrait'); });
+      var v = qs('video', ch), btn = qs('[data-sound]', ch), checked = false;
+      if (!v) return;
+      v.addEventListener('loadedmetadata', function () { if (v.videoHeight > v.videoWidth * 1.05) ch.classList.add('is-portrait'); });
+      v.addEventListener('playing', function () {
+        if (checked || !btn) return; checked = true;
+        setTimeout(function () {
+          var silent = (v.audioTracks && v.audioTracks.length === 0) || (typeof v.mozHasAudio === 'boolean' && !v.mozHasAudio) ||
+            (typeof v.webkitAudioDecodedByteCount === 'number' && v.webkitAudioDecodedByteCount === 0);
+          if (silent) btn.hidden = true;
+        }, 1500);
+      });
     });
+  }
+
+  /* ---------- Цифры-барабаны: прокручиваются до значения при появлении ---------- */
+  function wheels() {
+    var items = qsa('[data-wheel]');
+    if (!items.length) return;
+    items.forEach(function (el, group) {
+      var src = el.getAttribute('data-wheel');
+      var m = src.match(/^(\D*?)(\d[\d\s ]*\d|\d)(.*)$/);
+      if (!m) return;
+      var vis = d.createElement('span'); vis.className = 'wh'; vis.setAttribute('aria-hidden', 'true');
+      function affix(txt, side) { if (!txt || !txt.trim()) return; var s = d.createElement('span'); s.className = 'wh__affix wh__affix--' + side; s.textContent = txt.trim(); vis.appendChild(s); }
+      affix(m[1], 'pre');
+      var k = 0;
+      m[2].split('').forEach(function (ch) {
+        if (/\s/.test(ch)) { var sp = d.createElement('span'); sp.className = 'wh__sp'; vis.appendChild(sp); return; }
+        var wheel = d.createElement('span'), strip = d.createElement('span');
+        wheel.className = 'wh__w'; strip.className = 'wh__s';
+        strip.style.setProperty('--to', String(20 + Number(ch)));
+        strip.style.setProperty('--delay', (group * 0.07 + k * 0.045) + 's');
+        for (var i = 0; i < 30; i++) { var n = d.createElement('span'); n.textContent = String(i % 10); strip.appendChild(n); }
+        wheel.appendChild(strip); vis.appendChild(wheel); k++;
+      });
+      affix(m[3], 'post');
+      var sr = d.createElement('span'); sr.className = 'sr'; sr.textContent = src;
+      el.textContent = ''; el.appendChild(vis); el.appendChild(sr);
+    });
+    if (reduce || !('IntersectionObserver' in window)) { items.forEach(function (e) { e.classList.add('is-seen'); }); return; }
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('is-seen'); io.unobserve(en.target); } });
+    }, { threshold: 0.6 });
+    items.forEach(function (e) { io.observe(e); });
   }
 
   window.V5App = {
     init: function () {
       var track = qs('[data-open]');
       if (track) openScene(track);
+      wheels();
       updCalc();
       observeNav();
       reveals();
